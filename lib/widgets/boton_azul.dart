@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class BotonAzul extends StatelessWidget {
     // Iniciar Variables
     final String text;
-    final Function() onPressed;
+    final Function()? onPressed;
     // Constructor
     const BotonAzul({
       Key? key,
@@ -19,6 +19,7 @@ class BotonAzul extends StatelessWidget {
           // Boton
           MaterialButton(
             onPressed: this.onPressed,
+            disabledColor: Colors.grey,
             color: Colors.blue,
             shape: StadiumBorder(),
             elevation: 2,

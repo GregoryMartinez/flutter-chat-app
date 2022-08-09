@@ -1,5 +1,8 @@
+import 'package:chat/helpers/mostrar_alerta.dart';
+import 'package:chat/services/auth_service.dart';
 import 'package:chat/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // Nombre Clase
 class RegisterPage extends StatelessWidget {
@@ -49,6 +52,8 @@ class _FormState extends State<_Form> {
     final nameController = TextEditingController();
     @override
     Widget build(BuildContext context) {
+        final authService = Provider.of<AuthService>(context);
+
         return Container(
             margin: EdgeInsets.only(top: 40),
             padding: EdgeInsets.symmetric(horizontal: 50),
@@ -57,7 +62,14 @@ class _FormState extends State<_Form> {
                     CustomInput(icon: Icons.perm_identity, placeholder: "Nombre", keyboardType: TextInputType.text, textController: nameController),
                     CustomInput(icon: Icons.mail_outline, placeholder: "Correo", keyboardType: TextInputType.emailAddress, textController: emailController),
                     CustomInput(icon: Icons.lock_outline, placeholder: "Contraseña", textController: passwordController, isPassword: true),
-                    BotonAzul(onPressed: (){}, text: "Ingrese")
+                    BotonAzul(onPressed: authService.autenticando ? null : () async{
+                        final registroOk = await authService.register(nameController.text.trim(), emailController.text.trim(), passwordController.text.trim());
+                        if (registroOk){
+                            Navigator.pushReplacementNamed(context, "usuarios");
+                        } else{
+                            mostrarAlerta(context, "Registro Incorrecto", "Datos Incorrectos");
+                        }
+                    }, text: "Crear cuenta")
                 ],
             )
         );
